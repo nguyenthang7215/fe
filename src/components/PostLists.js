@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+const API_BASE = "https://tq3dhx-8080.csb.app";
 
 export default function PostLists() {
   const [data, setData] = useState([]);
@@ -9,7 +11,10 @@ export default function PostLists() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://tq3dhx-8080.csb.app/api/posts");
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`${API_BASE}/api/posts`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

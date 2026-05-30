@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+const API_BASE = "https://tq3dhx-8080.csb.app";
+
 export default function Post() {
   const { slug } = useParams();
   const [post, setPost] = useState({});
@@ -10,9 +12,10 @@ export default function Post() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://tq3dhx-8080.csb.app/api/post/" + slug
-        );
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`${API_BASE}/api/post/${slug}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         const result = await response.json();
         setPost(result);
       } catch (error) {
@@ -24,12 +27,16 @@ export default function Post() {
 
   const onSubmitComment = async (data) => {
     try {
+      const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `https://tq3dhx-8080.csb.app/api/post/${slug}/comment`,
+        `${API_BASE}/api/commentsOfPhoto/${post._id}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({ comment: data.newComment }),
         }
       );
 
@@ -39,7 +46,7 @@ export default function Post() {
         // Cập nhật lại state để hiển thị comment mới ngay lập tức
         setPost((prevPost) => ({
           ...prevPost,
-          comment: [...(prevPost.comment || []), result.comment],
+          comment: [...(prevPost.comment || []), result],
         }));
 
         reset(); // Xoá trắng ô input sau khi gửi
@@ -62,7 +69,14 @@ export default function Post() {
       <h4>Bình luận ({comment.length})</h4>
       <ul>
         {comment.map((cmt, index) => (
-          <li key={index}>{cmt}</li>
+          <li key={index}>
+            {typeof cmt === "string" ? cmt : cmt.comment}
+            {typeof cmt === "string" ? null : (
+              <small style={{ marginLeft: 8, color: "#666" }}>
+                {new Date(cmt.date_time).toLocaleString()}
+              </small>
+            )}
+          </li>
         ))}
       </ul>
 

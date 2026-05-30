@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+const API_BASE = "http://localhost:8080";
+
 export default function NewPost() {
   const [newPost, setNewPost] = useState("");
   const {
@@ -12,11 +14,13 @@ export default function NewPost() {
   const onSubmit = async (data) => {
     const post = JSON.stringify(data);
     try {
-      const res = await fetch("https://tq3dhx-8080.csb.app/api/post", {
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${API_BASE}/api/post`, {
         method: "post",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: post,
       });
