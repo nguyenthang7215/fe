@@ -6,7 +6,7 @@ function UserList() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("https://trkp7s-8080.csb.app/api/user/list", {
+    fetch("http://localhost:8080/api/user/list", {
       credentials: "include",
     })
       .then((res) => res.json())

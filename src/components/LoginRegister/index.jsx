@@ -14,7 +14,7 @@ function LoginRegister({ setCurrentUser }) {
     try {
       setError("");
 
-      const res = await fetch("https://trkp7s-8080.csb.app/admin/login", {
+      const res = await fetch("http://localhost:8080/admin/login", {
         method: "POST",
 
         headers: {
@@ -62,7 +62,7 @@ function LoginRegister({ setCurrentUser }) {
     }
 
     try {
-      const res = await fetch("https://trkp7s-8080.csb.app/api/user", {
+      const res = await fetch("http://localhost:8080/api/user", {
         method: "POST",
 
         headers: {
@@ -148,33 +148,36 @@ function LoginRegister({ setCurrentUser }) {
 
           <input
             placeholder="First Name"
+            value={registerData.first_name}
             onChange={(e) =>
-              setRegisterData({
-                ...registerData,
+              setRegisterData((prev) => ({
+                ...prev,
                 first_name: e.target.value,
-              })
+              }))
             }
           />
           <br />
 
           <input
             placeholder="Last Name"
+            value={registerData.last_name}
             onChange={(e) =>
-              setRegisterData({
-                ...registerData,
+              setRegisterData((prev) => ({
+                ...prev,
                 last_name: e.target.value,
-              })
+              }))
             }
           />
           <br />
 
           <input
             placeholder="Login Name"
+            value={registerData.login_name}
             onChange={(e) =>
-              setRegisterData({
-                ...registerData,
+              setRegisterData((prev) => ({
+                ...prev,
                 login_name: e.target.value,
-              })
+              }))
             }
           />
           <br />
@@ -182,11 +185,12 @@ function LoginRegister({ setCurrentUser }) {
           <input
             type="password"
             placeholder="Password"
+            value={registerData.password}
             onChange={(e) =>
-              setRegisterData({
-                ...registerData,
+              setRegisterData((prev) => ({
+                ...prev,
                 password: e.target.value,
-              })
+              }))
             }
           />
           <br />
@@ -194,11 +198,48 @@ function LoginRegister({ setCurrentUser }) {
           <input
             type="password"
             placeholder="Confirm Password"
+            value={registerData.confirmPassword}
             onChange={(e) =>
-              setRegisterData({
-                ...registerData,
+              setRegisterData((prev) => ({
+                ...prev,
                 confirmPassword: e.target.value,
-              })
+              }))
+            }
+          />
+          <br />
+
+          <input
+            placeholder="Location"
+            value={registerData.location}
+            onChange={(e) =>
+              setRegisterData((prev) => ({
+                ...prev,
+                location: e.target.value,
+              }))
+            }
+          />
+          <br />
+
+          <input
+            placeholder="Occupation"
+            value={registerData.occupation}
+            onChange={(e) =>
+              setRegisterData((prev) => ({
+                ...prev,
+                occupation: e.target.value,
+              }))
+            }
+          />
+          <br />
+
+          <input
+            placeholder="Description"
+            value={registerData.description}
+            onChange={(e) =>
+              setRegisterData((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
             }
           />
           <br />

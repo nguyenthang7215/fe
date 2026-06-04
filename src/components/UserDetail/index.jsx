@@ -7,7 +7,7 @@ function UserDetail() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch(`https://trkp7s-8080.csb.app/api/user/${userId}`, {
+    fetch(`http://localhost:8080/api/user/${userId}`, {
       credentials: "include",
     })
       .then((res) => res.json())

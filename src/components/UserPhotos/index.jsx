@@ -6,66 +6,64 @@ function UserPhotos({ advanced }) {
   const { userId } = useParams();
   const [photos, setPhotos] = useState([]);
   const [index, setIndex] = useState(0);
-  const [newComment, setNewComment] = useState("");
-  // thêm comment
+  // state comment riêng cho từng ảnh: { [photoId]: "text" }
+  const [commentTexts, setCommentTexts] = useState({});
+
+  const handleCommentChange = (photoId, value) => {
+    setCommentTexts((prev) => ({ ...prev, [photoId]: value }));
+  };
+
   const addComment = async (photoId) => {
+    const text = commentTexts[photoId] || "";
+    if (!text.trim()) {
+      return alert("Comment cannot be empty");
+    }
     try {
       const res = await fetch(
-        `https://trkp7s-8080.csb.app/api/photo/commentsOfPhoto/${photoId}`,
+        `http://localhost:8080/api/photo/commentsOfPhoto/${photoId}`,
         {
           method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
-
-          body: JSON.stringify({
-            comment: newComment,
-          }),
+          body: JSON.stringify({ comment: text }),
         }
       );
 
       if (!res.ok) {
-        throw new Error("Comment cannot be empty");
+        const msg = await res.text();
+        throw new Error(msg);
       }
 
-      // reload photos
+      // reload photos của user
       const updated = await fetch(
-        `https://trkp7s-8080.csb.app/api/photo/photosOfUser/${userId}`,
-        {
-          credentials: "include",
-        }
+        `http://localhost:8080/api/photo/photosOfUser/${userId}`,
+        { credentials: "include" }
       );
-
       const data = await updated.json();
-
       setPhotos(data);
 
-      setNewComment("");
+      // xóa ô input của ảnh đó
+      setCommentTexts((prev) => ({ ...prev, [photoId]: "" }));
     } catch (err) {
       alert(err.message);
     }
   };
 
   useEffect(() => {
-    fetch(`https://trkp7s-8080.csb.app/api/photo/photosOfUser/${userId}`, {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Status ${res.status}`);
-        }
-
-        return res.json();
+    const fetchPhotos = () =>
+      fetch(`http://localhost:8080/api/photo/photosOfUser/${userId}`, {
+        credentials: "include",
       })
-      .then((data) => {
-        console.log("photos:", data);
+        .then((res) => {
+          if (!res.ok) throw new Error(`Status ${res.status}`);
+          return res.json();
+        })
+        .then((data) => setPhotos(data))
+        .catch((err) => console.log(err));
 
-        setPhotos(data);
-      })
-      .catch((err) => console.log(err));
+    fetchPhotos();
+    window.addEventListener("photo-uploaded", fetchPhotos);
+    return () => window.removeEventListener("photo-uploaded", fetchPhotos);
   }, [userId]);
 
   if (photos.length === 0) {
@@ -75,11 +73,9 @@ function UserPhotos({ advanced }) {
   const renderPhoto = (photo) => (
     <div key={photo._id}>
       <img
-        src={`https://trkp7s-8080.csb.app/images/${photo.file_name}`}
+        src={`http://localhost:8080/images/${photo.file_name}`}
         alt={photo.file_name}
-        style={{
-          maxWidth: "100%",
-        }}
+        style={{ width: "100%", maxWidth: "400px", height: "auto", borderRadius: "8px", border: "1px solid #ccc" }}
       />
 
       <p>{new Date(photo.date_time).toLocaleString()}</p>
@@ -93,15 +89,14 @@ function UserPhotos({ advanced }) {
         </div>
       ))}
 
-      {/* add comment */}
+      {/* add comment — input riêng cho mỗi ảnh */}
       <div className="comment-box">
         <input
           type="text"
           placeholder="Write a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
+          value={commentTexts[photo._id] || ""}
+          onChange={(e) => handleCommentChange(photo._id, e.target.value)}
         />
-
         <button onClick={() => addComment(photo._id)}>Add</button>
       </div>
     </div>

@@ -6,7 +6,7 @@ import "./styles.css";
 function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
   // logout
   const logout = async () => {
-    await fetch("https://trkp7s-8080.csb.app/admin/logout", {
+    await fetch("http://localhost:8080/admin/logout", {
       method: "POST",
 
       credentials: "include",
@@ -25,7 +25,7 @@ function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
     formData.append("photo", file);
 
     try {
-      const res = await fetch("https://trkp7s-8080.csb.app/photos/new", {
+      const res = await fetch("http://localhost:8080/photos/new", {
         method: "POST",
 
         credentials: "include",
@@ -39,7 +39,7 @@ function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
 
       alert("Photo uploaded!");
 
-      window.location.reload();
+      window.dispatchEvent(new CustomEvent("photo-uploaded"));
     } catch (err) {
       alert(err.message);
     }
@@ -48,7 +48,7 @@ function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
   return (
     <div className="topbar">
       {/* tên sinh viên */}
-      <Typography variant="h6">Nguyễn Thị Nhung</Typography>
+      <Typography variant="h6">Nguyễn Tiến Thắng</Typography>
 
       {/* advanced */}
       <div>
