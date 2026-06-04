@@ -44,7 +44,6 @@ function LoginRegister({ setCurrentUser }) {
     }
   };
 
-  // ĐĂNG KÝ
   const [registerData, setRegisterData] = useState({
     login_name: "",
     password: "",
@@ -98,7 +97,6 @@ function LoginRegister({ setCurrentUser }) {
   return (
     <div>
       {!showRegister ? (
-        // LOGIN PAGE
         <>
           <h2>Please Login</h2>
 
@@ -142,7 +140,6 @@ function LoginRegister({ setCurrentUser }) {
           <p>{error}</p>
         </>
       ) : (
-        // REGISTER PAGE
         <>
           <h2>Register</h2>
 

@@ -4,7 +4,6 @@ import { Typography, Checkbox, Button } from "@mui/material";
 import "./styles.css";
 
 function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
-  // logout
   const logout = async () => {
     await fetch("http://localhost:8080/admin/logout", {
       method: "POST",
@@ -47,10 +46,8 @@ function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
 
   return (
     <div className="topbar">
-      {/* tên sinh viên */}
       <Typography variant="h6">Nguyễn Tiến Thắng</Typography>
 
-      {/* advanced */}
       <div>
         <Checkbox
           checked={advanced}
@@ -73,7 +70,6 @@ function TopBar({ advanced, setAdvanced, currentUser, setCurrentUser }) {
         </span>
       </div>
 
-      {/* right side */}
       <div
         style={{
           display: "flex",

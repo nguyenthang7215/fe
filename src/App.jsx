@@ -13,6 +13,7 @@ import UserDetail from "./components/UserDetail";
 import UserList from "./components/UserList";
 import UserPhotos from "./components/UserPhotos";
 import LoginRegister from "./components/LoginRegister";
+import UserComments from "./components/UserComments";
 
 const App = () => {
   const [advanced, setAdvanced] = useState(false);
@@ -56,10 +57,9 @@ const App = () => {
 
                     <Route path="/users/:userId" element={<UserDetail />} />
 
-                    <Route
-                      path="/photos/:userId"
-                      element={<UserPhotos advanced={advanced} />}
-                    />
+                    <Route path="/photos/:userId" element={<UserPhotos advanced={advanced} />}/>
+
+                    <Route path="/comments/:userId" element={<UserComments />}/>
 
                     {/* fallback */}
                     <Route

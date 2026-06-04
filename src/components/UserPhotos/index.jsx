@@ -44,6 +44,9 @@ function UserPhotos({ advanced }) {
 
       // xóa ô input của ảnh đó
       setCommentTexts((prev) => ({ ...prev, [photoId]: "" }));
+      
+      // Báo cho các component khác là vừa có comment mới
+      window.dispatchEvent(new CustomEvent("comment-added"));
     } catch (err) {
       alert(err.message);
     }
