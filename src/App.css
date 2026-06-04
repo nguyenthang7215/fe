@@ -1,0 +1,41 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-grid {
+  flex: 1;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+.main-grid > .MuiGrid-item {
+  height: 100%;
+}
+
+.sidebar {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.main-grid-item {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.main-grid-item::-webkit-scrollbar {
+  display: none;
+}

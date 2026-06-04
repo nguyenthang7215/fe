@@ -1,0 +1,23 @@
+.photos-container {
+  max-width: 100%;
+}
+
+.photo-card {
+  margin-bottom: 20px;
+}
+
+.photo-img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 6px;
+}
+
+.photo-date {
+  font-size: 14px;
+  color: gray;
+}
+
+.comment {
+  margin-left: 15px;
+  margin-bottom: 8px;
+}

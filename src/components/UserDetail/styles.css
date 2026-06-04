@@ -1,0 +1,22 @@
+.user-detail {
+  padding: 15px;
+}
+
+.name {
+  margin-bottom: 10px;
+}
+
+.photo-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: blue;
+  text-decoration: none;
+}
+
+.photo-link:hover {
+  text-decoration: underline;
+}
+
+.not-found {
+  color: red;
+}
