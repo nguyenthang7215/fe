@@ -36,7 +36,7 @@ function UserComments() {
       ) : (
         comments.map((item) => (
           <Paper key={item._id} style={{ padding: "10px", marginBottom: "15px", display: "flex", alignItems: "center", gap: "15px" }}>
-            <Link to={`/photos/${item.photo.user_id}`}>
+            <Link to={`/photos/${item.photo.user_id}?photoId=${item.photo._id}`}>
               <img
                 src={`http://localhost:8080/images/${item.photo.file_name}`}
                 alt="thumbnail"
@@ -45,7 +45,7 @@ function UserComments() {
             </Link>
             <div>
               <Typography variant="body1">
-                <Link to={`/photos/${item.photo.user_id}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+                <Link to={`/photos/${item.photo.user_id}?photoId=${item.photo._id}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
                   "{item.comment}"
                 </Link>
               </Typography>

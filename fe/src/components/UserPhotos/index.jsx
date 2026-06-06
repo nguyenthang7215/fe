@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import "./styles.css";
 
 function UserPhotos({ advanced }) {
   const { userId } = useParams();
+  const [searchParams] = useSearchParams();
+  const targetPhotoId = searchParams.get("photoId");
+
   const [photos, setPhotos] = useState([]);
   const [index, setIndex] = useState(0);
   // state comment riêng cho từng ảnh: { [photoId]: "text" }
@@ -34,7 +37,6 @@ function UserPhotos({ advanced }) {
         throw new Error(msg);
       }
 
-      // reload photos của user
       const updated = await fetch(
         `http://localhost:8080/api/photo/photosOfUser/${userId}`,
         { credentials: "include" }
@@ -42,9 +44,8 @@ function UserPhotos({ advanced }) {
       const data = await updated.json();
       setPhotos(data);
 
-      // xóa ô input của ảnh đó
       setCommentTexts((prev) => ({ ...prev, [photoId]: "" }));
-      
+
       // Báo cho các component khác là vừa có comment mới
       window.dispatchEvent(new CustomEvent("comment-added"));
     } catch (err) {
@@ -69,12 +70,32 @@ function UserPhotos({ advanced }) {
     return () => window.removeEventListener("photo-uploaded", fetchPhotos);
   }, [userId]);
 
+  useEffect(() => {
+    if (!targetPhotoId || photos.length === 0) return;
+
+    const idx = photos.findIndex((p) => p._id === targetPhotoId);
+    if (idx === -1) return;
+
+    if (advanced) {
+      // Chế độ stepper: set index đúng ảnh
+      setIndex(idx);
+    } else {
+      // Chế độ standard: scroll đến ảnh đó
+      setTimeout(() => {
+        const el = document.getElementById(`photo-${targetPhotoId}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [photos, targetPhotoId, advanced]);
+
   if (photos.length === 0) {
     return <div>No photos</div>;
   }
 
   const renderPhoto = (photo) => (
-    <div key={photo._id}>
+    <div key={photo._id} id={`photo-${photo._id}`}
+      style={targetPhotoId === photo._id ? { outline: "3px solid #1976d2", borderRadius: "10px", padding: "6px" } : {}}
+    >
       <img
         src={`http://localhost:8080/images/${photo.file_name}`}
         alt={photo.file_name}
